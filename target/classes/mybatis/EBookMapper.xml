@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zlst.demo.mapper.EBookMapper">
+    <select id="selectEBook" resultType="String">
+        SELECT file_path FROM ebook WHERE title = #{name};
+    </select>
+</mapper>

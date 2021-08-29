@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zlst.demo.mapper.BookMapper">
+    <resultMap id="BookMap" type="Book">
+        <id column="id" property="id"/>
+        <result column="cover" property="cover" />
+        <result column="title" property="title" />
+        <result column="author" property="author" />
+        <result column="date" property="date" />
+        <result column="press" property="press" />
+        <result column="abs" property="abs" />
+        <association property="category" javaType="Category">
+            <id column="cid" property="id" />
+            <result column="name" property="name"/>
+        </association>
+    </resultMap>
+    <select id="findAllBooks" resultMap="BookMap">
+        SELECT book.*,category.id,category.name
+        FROM book
+        INNER JOIN category
+        ON book.cid = category.id
+        ORDER BY book.id;
+    </select>
+    <select id="findBookByCid" resultMap="BookMap">
+        SELECT book.*,category.id,category.name
+        FROM book
+        INNER JOIN category
+        ON book.cid = category.id
+        WHERE book.cid = #{cid}
+    </select>
+    <select id="findBookByIds" resultMap="BookMap">
+        SELECT book.*,category.id,category.name
+        FROM book
+        INNER JOIN category
+        ON book.cid = category.id
+        WHERE book.id IN
+        <foreach collection="bookIds" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    <select id="findBookByKey" resultMap="BookMap">
+        SELECT book.*,category.id,category.name
+        FROM book
+        INNER JOIN category
+        WHERE author LIKE #{key1}
+        OR title LIKE #{key2}
+    </select>
+    <select id="findBook" resultType="Book">
+        SELECT *
+        FROM book
+        WHERE title = #{title}
+    </select>
+    <insert id="insertBook" parameterType="Book" useGeneratedKeys="true">
+        INSERT INTO book (cover,title,author,date,press,abs,cid)
+        VALUES (#{cover},#{title},#{author},#{date},#{press},#{abs},#{category.id});
+    </insert>
+    <update id="updateBook" parameterType="Book" >
+        UPDATE book
+        SET
+            cover=#{cover},title=#{title},author=#{author},date=#{date},press=#{press},abs=#{abs},cid=#{category.id}
+        WHERE
+            title=#{title}
+    </update>
+    <delete id="deleteBookById" parameterType="int">
+        DELETE FROM book
+        WHERE id=#{id};
+    </delete>
+    <select id="findBookById" resultMap="BookMap">
+        SELECT book.*,category.id,category.name
+        FROM book
+        INNER JOIN category
+        ON book.cid = category.id
+        WHERE book.id=#{id}
+    </select>
+    <select id="findBookByTitle" resultMap="BookMap">
+        SELECT book.*,category.id,category.name
+        FROM book
+        INNER JOIN category
+        ON book.cid = category.id
+        WHERE book.title=#{title}
+    </select>
+</mapper>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zlst.demo.mapper.MyBookMapper">
+    <select id="findMyBook" resultType="MyBook">
+        SELECT *
+        FROM my_book
+        WHERE title = #{title}
+    </select>
+    <update id="updateBook" parameterType="MyBook" >
+        UPDATE my_book
+        SET
+            path=#{path},title=#{title},bid=#{bid}
+        WHERE
+            title=#{title}
+    </update>
+    <insert id="insertBook" parameterType="MyBook" useGeneratedKeys="true">
+        INSERT INTO my_book (title,path,bid)
+        VALUES (#{title},#{path},#{bid});
+    </insert>
+    <select id="findMyBookById" resultType="MyBook">
+        SELECT *
+        FROM my_book
+        WHERE bid = #{bid}
+    </select>
+    <select id="findAllBooks" resultType="MyBook">
+        SELECT *
+        FROM my_book
+    </select>
+    <select id="findNowBooks" resultType="Integer">
+        SELECT bid
+        FROM my_book
+        WHERE status = "在更"
+    </select>
+</mapper>
